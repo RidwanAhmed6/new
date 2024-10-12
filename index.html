@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script>
+  google.script.run.withSuccessHandler(e => {
+    console.log(e); // Here, you can check the returned CSS at the console.
+    document.querySelector("head").insertAdjacentHTML('beforeend', e); // or 'afterBegin'
+  }).getStyle(/Mobi/.test(navigator.userAgent))
+  </script>
+  <style>
+    body {
+      font-family: 'Noto Serif Bengali', serif;
+      background-color: #f0f0f0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+  .carousel-item {
+    position: relative; /* Ensure that the checkbox is positioned relative to the item */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    display: block; /* Center the image */
+    margin: 0 auto; /* Center alignment */
+}
+
+.design-checkbox {
+    position: absolute; /* Position the checkbox absolutely */
+    top: 10%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust position to center */
+    width: 60px; /* Adjust the width as needed */
+    height: 60px; /* Adjust the height as needed */
+    z-index: 10; /* Ensure checkbox is above the image */
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+/* Optional: Styling the label for better visibility */
+.design-checkbox + label {
+    display: block; /* Make label a block element */
+}
+
+
+    .carousel-control-prev, .carousel-control-next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #ff8c00;
+      color: #ffffff;
+      border-radius: 50%;
+      height: 50px;
+      width: 50px;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .carousel-control-prev:hover, .carousel-control-next:hover {
+      background-color: #ff6c00;
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-control-prev i, .carousel-control-next i {
+      font-size: 24px;
+      transition: color 0.3s ease;
+    }
+
+    .carousel-control-prev:hover i, .carousel-control-next:hover i {
+      color: #f1f1f1;
+    }
+
+    .fabric-option {
+      position: relative;
+      display: block;
+      cursor: pointer;
+      text-align: center;
+      background-color: #f8f9fa;
+      border: 2px solid #ddd;
+      padding: 20px;
+      border-radius: 10px;
+      transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .fabric-option input {
+      display: none;
+    }
+
+    .fabric-option .custom-checkbox {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      height: 20px;
+      width: 20px;
+      background-color: #f8f9fa;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .fabric-option input:checked + .custom-checkbox {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    .fabric-option .custom-checkbox::after {
+      content: '';
+      position: absolute;
+      display: none;
+    }
+
+    .fabric-option input:checked + .custom-checkbox::after {
+      display: block;
+      left: 6px;
+      top: 2px;
+      width: 6px;
+      height: 12px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .fabric-option .banner {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+      transition: color 0.3s ease;
+    }
+
+    .fabric-option input:checked + .custom-checkbox + .banner {
+      background-color: #007bff;
+      color: white;
+      border: 2px solid #007bff;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 123, 255, 0.3);
+    }
+
+    .fabric-option:hover {
+      transform: translateY(-5px);
+    }
+
+    .fabric-option:hover .banner {
+      background-color: #e2e6ea;
+    }
+
+    .fabric-option:hover {
+      border-color: #007bff;
+    }
+
+    .invalid-feedback {
+      margin-top: 10px;
+      display: none;
+      color: red;
+    }
+
+    .invalid-feedback.active {
+      display: block;
+    }
+
+    .d-flex {
+      display: flex;
+    }
+
+    .justify-content-between {
+      justify-content: space-between;
+    }
+
+.btn-primary, .btn-secondary {
+    border-radius: 50px;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    color: white; /* সাদা লেখা */
+    font-weight: bold; /* বোল্ড লেখা */
+}
+
+.btn-primary {
+    background-color: #006400; /* ডিপ গ্রিন */
+    border-color: #006400; /* ডিপ গ্রিন */
+}
+
+.btn-primary:hover {
+    background-color: #004d00; /* হোভারের জন্য গা darker ডিপ গ্রিন */
+    border-color: #004d00; /* হোভারের জন্য গা darker ডিপ গ্রিন */
+}
+
+.btn-secondary {
+    background-color: #dc3545; /* লাল */
+    border-color: #dc3545; /* লাল */
+}
+
+.btn-secondary:hover {
+    background-color: #c82333; /* হোভারের জন্য গা darker লাল */
+    border-color: #c82333; /* হোভারের জন্য গা darker লাল */
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    transform: scale(1.05);
+}
+
+
+
+
+
+    .size-option {
+  margin: 10px;
+  cursor: pointer;
+}
+
+.size-option input[type="radio"] {
+  display: none; /* Hide the actual radio buttons */
+}
+
+.option-card {
+  padding: 20px;
+  border: 2px solid #ccc; /* Default border color */
+  border-radius: 5px;
+  text-align: center;
+  transition: border-color 0.3s, background-color 0.3s;
+  width: 60px; /* Width of the size option */
+  height: 60px; /* Height of the size option */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.size-option input[type="radio"]:checked + .option-card {
+  border-color: #007bff; /* Border color when selected */
+  background-color: #e7f0ff; /* Background color when selected */
+}
+
+  </style>
+
+
+
+</head>
+<body>
+
+<div id="design-selection" class="container mt-4">
+  <h2 class="text-center">
+    <span style='color: #28a745; font-size: 24px; font-weight: bold;'>✨ ডিজাইন সিলেক্ট করুন! ✨</span>
+  </h2>
+  <h4 class="text-center">
+    <span style='color: red;'>সিলেক্ট করতে ছবির উপড় ক্লিক করুন</span>
+  </h4>
+  
+  <div id="designCarousel" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+      <!-- First Design -->
+      <div class="carousel-item active">
+        <input type="checkbox" class="design-checkbox" id="design1" data-code="P001" onclick="selectDesign(this)">
+        <label for="design1">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj-KYJ9QFju-3yH9RD6NDspJSTQH6omAW66gC4HJBvVRowFHS-jmctiHf0BenW42uJdlMT75x0g0mRE2Ry7hXmEwb-XMzpBDZyCw7kxh5AlV7YIvY6yTgpuR6_coHx4GdhmNFUa9pcanRtur2qkZHIjFXhICZspP4E4Xn28WVkxl6Ad7WHbJQ_A5gNHuII/s320/10001.png" alt="Design 1">
+        </label>
+      </div>
+      <!-- Second Design -->
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design2" data-code="P002" onclick="selectDesign(this)">
+        <label for="design2">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiKB_S4PIIiniib2xPD3kuLI3b5sttx1H_G9p_EdLyr_dKsptjbRwKx6wynE8s-DzgCZAt8VDjBxx544V6u1pVVo1QkCaSytqO-20mlai1z9yuhov5UmzEDe-LL3b0JS3JZb0oIIU3RaPAy0LHSlC2cmz0I9LljTDzDf8QHN5Y48yb_BPBTnhFNxDXUhyphenhyphenI/s320/10002.png" alt="Design 2">
+        </label>
+      </div>
+      <!-- Add more designs -->
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design3" data-code="P003" onclick="selectDesign(this)">
+        <label for="design3">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhLXzPMFhRjabhaORUF5KPokFTS-8NdEEXyGJosQUD2dhdA0S5VDN3zQx-hiWtWOk0VoNGJiWK2UPl2n_mKBvb8cFa9J2QkZfpgWb1iTjCj8kWYwQ_kQR2lmNqNuSpcL5QQZhM2cu8gYAC9tOwuL0nn4WFwmL-dKdPoeZ0YjerM1RgBzg7eWEXpriJeZag/s320/10003.png" alt="Design 3">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design4" data-code="P004" onclick="selectDesign(this)">
+        <label for="design4">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjKJ3W2Jp8yUq5PVPo6CnfPuerBhrJelcENAHY2utvJjn58n5_ShJX4fDOmR87qBpx7N35ZcKr7zWEZYYIewsrV817ohUQZQnCbZpZvNvdO66QPGZZRqyfFq2OO-QwXs9q2BGsZY75W9l6Pe2naaUbzDdjKMSZLiMKOBoTGycItVUAMWTu2kYFXbJsGOAg/s320/10004.png" alt="Design 4">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design5" data-code="P005" onclick="selectDesign(this)">
+        <label for="design5">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiwzBnGgF-Xed02DUQu88KogvDXBiV7zvbR5Dgjk9gx7XZVxBK9xFCdJNReJTGDSNHOumGMCXFlcntiwR2hbkA8TT57aJzNdbxPwscfa6P7hRP8hdpJCjFxkauoMRkhgyI6lOIyPxvWVZM8x8pOArA-A700v-oEOmR0rRTLLnphyphenhyphenCX5alJTcdp7qp4dEjg/s320/10005.png" alt="Design 5">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design6" data-code="P006" onclick="selectDesign(this)">
+        <label for="design6">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjoyLGyV2GIzjZp7Ym9-wjUfLYn1qL11ss0o4gsQao0P0kmFW8Ud0F8TvLcw9SsNz2Q0Zj1DCC6udIp-dXRXgvyjZQRTHiI8XuulMtcdshENrgINUUZnzipJQaTXXfzCEfaQO7_UoewP94zIgSXqcbSnqgrCw9n31L7DFlf6Cgce4VzscngNHcheYFi0aw/s320/10006.png" alt="Design 6">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design7" data-code="P007" onclick="selectDesign(this)">
+        <label for="design7">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjveOX6TMdF8pwBRSoITNxG3P86_rlGRnYskx2VomF_zH-gOYRF3dWPYj1d8D-tMEKYsLVzlrSQGyZYknIq-VUg3wfevlKeFn4JVbdZjDILO5x5tfikL48zJxHV1DjHHL36_Xy5H3dRtxJO4gRmJGmWw0siEkPAWiKys6uGqYOYp2MLh-HPg0ffYUToliE/s320/10007.png" alt="Design 7">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design8" data-code="P008" onclick="selectDesign(this)">
+        <label for="design8">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjHHVLg4OWI6158iV6g5HoeTJnildh8fR_inKCCIc8h8LW66fIub_zZ_6qEB4Fv430MGF5nfYUR9m6PUn1WTdSTRcOdLgY_uaYXG83tZze9qh4_MgXqTQp2Qf9xpEOyAcVjTF4SpQRLiXtms-v4-8yMT5eckXF8Y59Ax1SNUEQNgiuTwEMVG-boc-vs4C4/s320/10008.png" alt="Design 8">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design9" data-code="P009" onclick="selectDesign(this)">
+        <label for="design9">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgLgtAv_hyUF-U1Hrn7OwaMMskWm6XKF7Zm2MU-Z4UqLQGNcQwuDlM7kwkbtMsWKjL5IoxT398HCmIcNFZuLlQ0hG2cQPkEz6yva5izQO4WZCGnlO592DFTwNSNV1sjqHT1UE59rHg3XDguW5Yp195Z3fblspom_2zhxtdFFlTpqwo0xPcV2YuwU_9E2JU/s320/10009.png" alt="Design 9">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design10" data-code="P010" onclick="selectDesign(this)">
+        <label for="design10">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj05zSG-OaIuFpqZaWH2P9G6rOABSIrFy4RSVqlV43wc8cA1bgqd97xiVDa2Ay_QbAscpDUQ31I-qb2203WdukrSFv60tXx4sU8lwe-rA23Pt7uUU4uTL7-EMX-k_jHn0vjRekusOH9wPRZ6jUVEx2zgnl_zHewg0TxV143Mzu2-AkYJRmUeen4MrzfLLM/s320/10010.png" alt="Design 10">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design11" data-code="P011" onclick="selectDesign(this)">
+        <label for="design11">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEik0eqoViL2CmS-etdTUg1SA37kmJ8M1sBXMTRdp7RhFjasAGoEA7k8ERlkmL06EqKh8urTzpZZqLhyphenhyphenIWu66Ba2cdQsI6bKeyedOwkDVNWkPAWqEwiaPiMp5bGriregPMMgqNnrqoNKSwblbdFbsg2tLvPOYyOjcfGiriB-nKMJN6AYP7t1bKUl4YcHxeo/s320/10011.png" alt="Design 11">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design12" data-code="P012" onclick="selectDesign(this)">
+        <label for="design12">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhstv_x3wqgoIftzn9ZetuaV3TBGzhUF5w8KR74HcoTtX_I4uWEMuOA7M-Wxm6kd4qcUSOAxxJRYKD62wX4tGW7nSObLXGkVQFtpcRrsxLV_n6Cz6mNL7ZxpuOx2M7VMTpBvvmg2Clb9ooTjmPU-0Neg8aapIrFQhS_8to5SDpo7gc1cDixLYPmsuVUHA4/s320/10012.png" alt="Design 12">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design13" data-code="P013" onclick="selectDesign(this)">
+        <label for="design13">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjYJNUxI6Vsf4c_Ge8tUarlStO_-kTt2xoepERw2Pr89kC79phmgsj_PDp3v_6b2Rq_xtQKeZ8b0VGNRGZ-4JjjVRoeIvABTEhQ_0I6UTh2BcqVDMqi-LfFplo12KCybsb7XWO_efeVvO_EesBlvfg1XtYlDs1k0nM2DCvuO44yurB_IOR7BNSLxt5r9ls/s320/10013.png" alt="Design 13">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design14" data-code="P014" onclick="selectDesign(this)">
+        <label for="design14">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgMtHZucnVec4znj2lfyaAxmeAdn8t7h_aebg866ViaRNk32EYXvr64Yk1acI0jmsT_ZTLoMfxA6g-rGfRib5JwpdVQlSM5lTv0zE_z8wTN1_08ndYVKOeZMbGzGntB74hrvNg7y7iz-Fp4RyAhqnwtH5gBYwwxDHVqCxzQAj95fX6lEQT_Klgx3WVp3LY/s320/10014.png" alt="Design 14">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design15" data-code="P015" onclick="selectDesign(this)">
+        <label for="design15">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhFxieQluVh4Zo8WckiHUjOZVQh_7-zOmC9f5tNbaOhB0QTPxbkk3oxA16jfYxOKkBfFN2cRz60kaTykWOjUoQTYQDYkjdJBHwFLa-4gHdQko_OcccCLHKI7NB1kKiYw9MMmlh7_DnkiwYGjZ8FMsyWCxlRS-E0Tu7M033R4rGCI9GN3Hz18uKrqF1k5o4/s320/10015.png" alt="Design 15">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design16" data-code="P016" onclick="selectDesign(this)">
+        <label for="design16">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhiQ_pu_cW0QNb3OIqvPzLDWwOkD9fgHOR0wJpFlOmzmbuj7vY7_gTcQrtJwyixZO1umc0lUQhXx1uwSZ2DmQ22bepLcpOBpA5taIpFxZmM-ZA-TkEUG5WIsNCawE-j9nPTRhF74opRKiF6kluH4MoDMWf7TsGz2QY1zRzGMia7DFdzWnqIH6e9NTZqqOU/s320/10016.png" alt="Design 16">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design17" data-code="P017" onclick="selectDesign(this)">
+        <label for="design17">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEghkXphd81MuggpzLs-G2-MuFbKs6jLFZ8fmsbOEiO9aerks6yr0m-4pg-hbillM_cGJk1pY9yy6SOgS7POJwoA5taWAfdqw2LpVJKmDAhy70q5PTgC9HoVu3bbr1rrPWljh__6LBo_GK0Q54eyo4jxQTr0V2Jw-n4nTWmuebVnAjYOmpSG3KMPM6IV1hQ/s320/10017.png" alt="Design 17">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design18" data-code="P018" onclick="selectDesign(this)">
+        <label for="design18">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi41QL6vePPkYrfkR6WsU2qc6Zg5NmlspqAF4J2cuWaJnT8j3kVk_jVMMLeVxg2KA4ctcL9x0TO-EKjyqPzg059-XW3cusIpwLVQJ4KRuEEqQ5UZHpaA-QNcgs5t4hpTUHCNHtNI2PO-fp6UfYCr2ll_l19hLlDLVnB8SwhpOgVWD9Mphj5VHxgPmhy2GY/s320/10018.png" alt="Design 18">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design19" data-code="P019" onclick="selectDesign(this)">
+        <label for="design19">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj1ogurvegFTsMwoOTNDouwciLguxizPwayrv1U2qSRQ1bj0nyWh-Io55Hr-0O6hwkHUIH3iwicNxK1yGiiH3waCghApcmw511WWD11h5QfF35x8bbpY8uuHh6_1EbMiAW2HetSm_9Zd9oQjzYCNcUU7EpbuDuIjJTy-2fvYUjLRAK7m02P2SnRb06rDBQ/s320/10019.png" alt="Design 19">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design20" data-code="P020" onclick="selectDesign(this)">
+        <label for="design20">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhtn-GWxLJUUj0IXAK2PD8BwEEAEu0DEZBf2vkKWTH0ZyDYL9g47tlNdtQmhNc6ltpWWx8DUafHy0JmczcARENGewLUqXl8jIn5mIT551hw-owHIwUnM221CEiTvQtN06r-xQX0KIRufBftKbmgvF-GPRxpy0My5MNv5busTpI3wP-FN7tbHM_UdYhe__8/s320/10020.png" alt="Design 20">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design21" data-code="P021" onclick="selectDesign(this)">
+        <label for="design21">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgnqyyaxlDgOb3NC8ka_WpPA39W0JHWz6NT_Bm_9UrE3BbXL-9FlUR7C6cJ7Hsu-o0Yg8FrEklATuSh1Rh1-12hqLnockWVN4gT57bknv1oN4CmwYdNFO2L29OCFQs4Boc5t3Wrl-vSVGb6AW7DN3V2VUr98WDDVaNfnIplY4qUR6zihseNT-uRIQgngi8/s320/10021.png" alt="Design 21">
+        </label>
+      </div>
+      <div class="carousel-item">
+        <input type="checkbox" class="design-checkbox" id="design22" data-code="P022" onclick="selectDesign(this)">
+        <label for="design22">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdoyzuH1H1e0pJ6m9OG_537B2A94aSjNeiCOskEMrhGRWN4nEvmQBz2x_Xz_Y10JUOhjTEahqg7sMZ1I5roL75AYeZupRvkphhacUXnjIe3EQa38KfUBfy49FuTMgOP0wiKkmd61WNAqISw-uA6V6W-wdWolMl-6AFx7X4cx-wk05WmQ8dq1qXouw5_R0/s320/10022.png" alt="Design 22">
+        </label>
+      </div>
+    </div>
+    <a class="carousel-control-prev" href="#designCarousel" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#designCarousel" role="button" data-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  <div class="d-flex justify-content-center">
+    <button onclick="showFabricSelection()" class="btn btn-primary mt-3">পরবর্তী ধাপ</button>
+  </div>
+</div>
+
+
+<div id="fabric-selection" class="container mt-4 hidden">
+   <h2 class="text-center">
+        <span style='color: #28a745; font-size: 24px; font-weight: bold;'>✨ অফার সিলেক্ট করুন ✨</span>
+    </h2>
+ 
+  <div class="row">
+    <div class="col-md-4">
+      <label class="fabric-option">
+        <input type="radio" name="fabric" value="জার্সি কাপড় ৪৯৯ টাকা ৪ পিছ">
+        <span class="custom-checkbox"></span>
+       <span class="banner">
+    <span style="border-radius: 10px; padding: 5px 10px; background-color: #28a745; color: #ffffff; font-size: 24px; font-weight: bold;">জার্সি কাপড়</span><br>
+    <span style="color: red; margin-top: 10px; display: inline-block;">৪৯৯</span> টাকা <span style="color: red; margin-top: 10px; display: inline-block;">৪</span> পিছ
+</span>
+
+
+
+      </label>
+    </div>
+    <div class="col-md-4">
+      <label class="fabric-option">
+        <input type="radio" name="fabric" value="মেষ কাপড় ৫৯৯ টাকা ৪ পিছ">
+        <span class="custom-checkbox"></span>
+        <span class="banner">
+        <span style="border-radius: 10px; padding: 5px 10px; background-color: #800000; color: #ffffff; font-size: 24px; font-weight: bold;">মেষ কাপড়</span><br>
+    <span style="color: red; margin-top: 10px; display: inline-block;">৫৯৯</span> টাকা <span style="color: red; margin-top: 10px; display: inline-block;">৪</span> পিছ
+</span>
+      </label>
+    </div>
+    <div class="col-md-4">
+      <label class="fabric-option">
+        <input type="radio" name="fabric" value="সুতি কাপড় ৬৯৯ টাকা ৪ পিছ">
+        <span class="custom-checkbox"></span>
+        <span class="banner">
+        <span style="border-radius: 10px; padding: 5px 10px; background-color: #008080; color: #ffffff; font-size: 24px; font-weight: bold;">সুতি কাপড়</span><br>
+    <span style="color: red; margin-top: 10px; display: inline-block;">৬৯৯</span> টাকা <span style="color: red; margin-top: 10px; display: inline-block;">৪</span> পিছ
+</span>
+      </label>
+    </div>
+  </div>
+  <div class="invalid-feedback text-center">দয়া করে একটি অফার সিলেক্ট করুন।</div>
+  
+  <div class="d-flex justify-content-between mt-3">
+    <button onclick="showPreviousPage()" class="btn btn-secondary">পূর্ববর্তী</button>
+    <button onclick="showSizeSelection()" class="btn btn-primary">পরবর্তী ধাপ</button>
+  </div>
+</div>
+
+<div id="size-selection" class="container mt-4 hidden">
+  <h2 class="text-center">
+    <span style='color: #28a745; font-size: 24px; font-weight: bold;'>✨ সাইজ সিলেক্ট করুন ✨</span>
+  </h2>
+  
+  <div class="d-flex flex-wrap justify-content-center">
+    <label class="size-option">
+      <input type="radio" name="size" value="S" class="d-none">
+      <div class="option-card">S</div>
+    </label>
+    <label class="size-option">
+      <input type="radio" name="size" value="M" class="d-none">
+      <div class="option-card">M</div>
+    </label>
+    <label class="size-option">
+      <input type="radio" name="size" value="L" class="d-none">
+      <div class="option-card">L</div>
+    </label>
+    <label class="size-option">
+      <input type="radio" name="size" value="XL" class="d-none">
+      <div class="option-card">XL</div>
+    </label>
+    <label class="size-option">
+      <input type="radio" name="size" value="XXL" class="d-none">
+      <div class="option-card">XXL</div>
+    </label>
+  </div>
+
+  <!-- New option for custom size -->
+  <div class="text-center mt-3">
+    <label for="custom-size">বিভিন্ন সাইজ নিতে চাইলে লিখুন (ঐচ্ছিক):</label>
+    <input type="text" id="custom-size" name="custom-size" class="form-control" placeholder="আপনার সাইজ লিখুন">
+  </div>
+  
+  <div class="invalid-feedback text-center">দয়া করে একটি সাইজ সিলেক্ট করুন।</div>
+  
+  <div class="d-flex justify-content-between mt-3">
+    <button onclick="showPreviousPage()" class="btn btn-secondary">পূর্ববর্তী</button>
+    <button onclick="showShippingDetails()" class="btn btn-primary">পরবর্তী</button>
+  </div>
+</div>
+
+
+
+<div id="shipping-information" class="container mt-4 hidden">
+  <h2 class="text-center">সঠিক তথ্য দিয়ে ফরম পূরন করুন</h2>
+  <div class="form-group">
+    <label for="name">আপনার নাম:</label>
+    <input type="text" class="form-control" id="name" placeholder="আপনার নাম লিখুন">
+    <div class="invalid-feedback">নাম লিখুন।</div>
+  </div>
+  <div class="form-group">
+    <label for="mobile">মোবাইল নম্বর:</label>
+    <input type="text" class="form-control" id="mobile" placeholder="মোবাইল নম্বর লিখুন">
+    <div class="invalid-feedback">মোবাইল নম্বর লিখুন।</div>
+  </div>
+  <div class="form-group">
+    <label for="address">বিস্তারিত ঠিকানা:</label>
+    <input type="text" class="form-control" id="address" placeholder="গ্রাম, থানা, জেলা সহ বিস্তারিত ঠিকানা লিখবেন?">
+    <div class="invalid-feedback">ঠিকানা লিখুন।</div>
+  </div>
+  
+  <div class="d-flex justify-content-between mt-3">
+    <button onclick="showPreviousPage()" class="btn btn-secondary">পূর্ববর্তী</button>
+    <button onclick="handleSubmit(event); confirmOrder();" class="btn btn-primary">অর্ডার কনফার্ম করুন</button>
+
+  </div>
+</div>
+
+<div id="confirmation" class="container mt-4 hidden">
+  <h2 class="text-center">অর্ডার কনফার্মেশন</h2>
+  <h2 class="text-center">
+    <span style='color: #28a745; font-size: 24px; font-weight: bold;'>অভিনন্দন!</span>
+  </h2>
+  
+  <p>আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।</p>
+  
+  <p>
+    <strong>আগামী ৩ দিন (৭২ ঘণ্টা)'র মধ্যে আপনার পণ্যটি ডেলিভারি করা হবে।</strong><br/>
+    প্রয়োজন হলে আমাদের টিম আপনার <b><span style='color:green'>📲 মোবাইল</span></b> নম্বর কল করে অর্ডার কনফার্ম করবে।
+  </p>
+          
+  <p>ডেলিভারি সময়: ৩ দিন।</p>
+  <p>মোট মূল্য: <span id="totalAmount">0</span> টাকা।</p>
+  <p>💖 ধন্যবাদ আপনার অর্ডার করার জন্য এবং আমাদের সাথে থাকার জন্য!</p>
+  <p>📞 যোগাযোগের জন্য: +8801919076192</p>
+          <p>🏢 কোম্পানি: T Shirts Haven</p>
+   <div class="d-flex justify-content-center">
+  <button onclick="handleNewOrder()" class="btn btn-primary">প্রয়োজনে 📞কল করুন</button>
+  </div>
+</div>
+
+
+<script>
+  function showFabricSelection() {
+    const designSelection = document.getElementById('design-selection');
+    const fabricSelection = document.getElementById('fabric-selection');
+    const selectedDesign = document.querySelector('.design-checkbox:checked');
+
+    if (!selectedDesign) {
+      alert('দয়া করে একটি ডিজাইন সিলেক্ট করুন।');
+      return;
+    }
+
+    designSelection.classList.add('hidden');
+    fabricSelection.classList.remove('hidden');
+  }
+
+
+
+
+  function showSizeSelection() {
+    const fabricSelection = document.getElementById('fabric-selection');
+    const sizeSelection = document.getElementById('size-selection');
+    const selectedFabric = document.querySelector('input[name="fabric"]:checked');
+
+    if (!selectedFabric) {
+      const invalidFeedback = fabricSelection.querySelector('.invalid-feedback');
+      invalidFeedback.classList.add('active');
+      return;
+    }
+
+    fabricSelection.classList.add('hidden');
+    sizeSelection.classList.remove('hidden');
+  }
+
+  function showShippingDetails() {
+    const sizeSelection = document.getElementById('size-selection');
+    const shippingInformation = document.getElementById('shipping-information');
+    const selectedSize = document.querySelector('input[name="size"]:checked');
+    const customSize = document.getElementById('custom-size').value.trim();
+
+    if (!selectedSize && !customSize) {
+        const invalidFeedback = sizeSelection.querySelector('.invalid-feedback');
+        invalidFeedback.classList.add('active');
+        return;
+    }
+   
+
+    sizeSelection.classList.add('hidden');
+    shippingInformation.classList.remove('hidden');
+}
+
+  function showPreviousPage() {
+    const pages = [
+      'design-selection',
+      'fabric-selection',
+      'size-selection',
+      'shipping-information'
+    ];
+    
+    for (let i = 0; i < pages.length; i++) {
+      const currentPage = document.getElementById(pages[i]);
+      if (!currentPage.classList.contains('hidden')) {
+        currentPage.classList.add('hidden');
+        if (i > 0) {
+          document.getElementById(pages[i - 1]).classList.remove('hidden');
+        }
+        break;
+      }
+    }
+  }
+
+  function confirmOrder() {
+    const name = document.getElementById('name').value.trim();
+    const mobile = document.getElementById('mobile').value.trim();
+    const address = document.getElementById('address').value.trim();
+    const selectedFabric = document.querySelector('input[name="fabric"]:checked');
+
+    if (!name) {
+      alert('দয়া করে আপনার নাম লিখুন।');
+      return;
+    }
+    if (!mobile) {
+      alert('দয়া করে মোবাইল নম্বর লিখুন।');
+      return;
+    }
+    if (!address) {
+      alert('দয়া করে ঠিকানা লিখুন।');
+      return;
+    }
+
+    const totalAmount = getTotalAmount(selectedFabric.value); // Assuming you have a function to calculate the total amount
+    document.getElementById('totalAmount').innerText = totalAmount;
+
+
+
+    const shippingInformation = document.getElementById('shipping-information');
+    const confirmation = document.getElementById('confirmation');
+
+    shippingInformation.classList.add('hidden');
+    confirmation.classList.remove('hidden');
+  }
+
+  function resetForm() {
+    const sections = [
+      'design-selection',
+      'fabric-selection',
+      'size-selection',
+      'shipping-information',
+      'confirmation'
+    ];
+
+    sections.forEach(section => {
+      document.getElementById(section).classList.add('hidden');
+    });
+
+    document.getElementById('design-selection').classList.remove('hidden');
+    document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+      input.checked = false;
+    });
+    document.getElementById('name').value = '';
+    document.getElementById('mobile').value = '';
+    document.getElementById('address').value = '';
+  }
+
+  function getTotalAmount(fabricValue) {
+    const priceMap = {
+      "জার্সি কাপড় ৪৯৯ টাকা ৪ পিছ": 500,
+      "মেষ কাপড় ৫৯৯ টাকা ৪ পিছ": 600,
+      "সুতি কাপড় ৬৯৯ টাকা ৪ পিছ": 700
+    };
+
+    return priceMap[fabricValue] || 0;
+  }
+
+  function handleNewOrder() {
+    resetForm(); // Call the reset function to clear the form
+    window.location.href = 'tel:+8801919076192'; // Initiate a phone call
+}
+  function handleSubmit(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Collect form data
+const formData = {
+    design: document.querySelector('.design-checkbox:checked').dataset.code,
+    fabric: document.querySelector('input[name="fabric"]:checked').value,
+    size: getSelectedSize(), // Get the selected size or custom size
+    name: document.getElementById('name').value,
+    mobile: document.getElementById('mobile').value,
+    address: document.getElementById('address').value,
+};
+
+// Function to get selected size or custom size
+function getSelectedSize() {
+    // Get the selected size value
+    const selectedSize = document.querySelector('input[name="size"]:checked');
+    
+    // Check if a size is selected
+    if (selectedSize) {
+        return selectedSize.value; // Return the selected size
+    } else {
+        // If no size is selected, check for the custom size input
+        const customSize = document.getElementById('custom-size').value.trim();
+        if (customSize) {
+            return customSize; // Return the custom size if provided
+        } else {
+            return null; // No size selected or provided
+        }
+    }
+}
+
+
+    // গুগল শিটে ফর্মের ডাটা পাঠানো
+    google.script.run.withSuccessHandler(function() {
+        // ফেসবুক পিক্সেল Purchase Tracking
+        fbq('track', 'Purchase', {
+            content_ids: ['T-Shirt'],
+            content_name: formData.design,
+            value: 120, // এখানে পারচেস ভ্যালু দিন
+            currency: 'BDT'
+        });
+
+        // পারচেস সাবমিশনের পর কনফার্মেশন মেসেজ ইত্যাদি দেখানো
+    }).submitData(formData);
+}
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
